@@ -22,10 +22,23 @@ export async function register(request, response) {
     request.session.save(() => {
         response.redirect(process.env.URL)
     })
-
-    response.json(newUser)
 }
 
-export function login(request, response) {
-    response.json("login")
+export async function login(request, response) {
+    const user = new User(request.body)
+    await user.loginUser()
+
+    if(user.errors.length > 0) {
+        request.flash("errors", user.errors)
+        request.session.save(() => {
+            return response.redirect(process.env.URL)
+        })
+        return
+    }
+
+    request.session.user = user.user
+    request.flash("success", "Logged successfully")
+    request.session.save(() => {
+        response.redirect(process.env.URL)
+    })
 }

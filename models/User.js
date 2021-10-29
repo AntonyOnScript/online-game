@@ -35,7 +35,26 @@ export default class User {
             this.body.password = bcrypt.hashSync(this.body.password, salt)
 
             this.user = await UserModel.create(this.body)
-            return this.user
+        } catch(e) {
+            console.log(e)
+        }
+    }
+
+    async loginUser() {
+        try {
+            this.checkFields()
+            if(this.errors.length > 0) return
+            
+            this.user = await UserModel.findOne({ email: this.body.email })
+            
+            if(!this.user) {
+                this.errors.push("User not found")
+            }
+            if(this.errors.length > 0) return
+            
+            if(!bcrypt.compareSync(this.body.password, this.user.password)) {
+                this.errors.push("The password is wrong")
+            }
         } catch(e) {
             console.log(e)
         }
