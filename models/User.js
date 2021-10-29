@@ -33,10 +33,10 @@ export default class User {
 
             const salt = bcrypt.genSaltSync(8)
             this.body.password = bcrypt.hashSync(this.body.password, salt)
-
+            
             this.user = await UserModel.create(this.body)
         } catch(e) {
-            console.log(e)
+            this.errors.push("This user already exists")
         }
     }
 
@@ -51,7 +51,6 @@ export default class User {
                 this.errors.push("User not found")
             }
             if(this.errors.length > 0) return
-            
             if(!bcrypt.compareSync(this.body.password, this.user.password)) {
                 this.errors.push("The password is wrong")
             }

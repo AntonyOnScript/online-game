@@ -5,7 +5,7 @@ import dotenv from "dotenv"
 import flash from "connect-flash"
 import MongoStore from "connect-mongo"
 import csrf from "csurf"
-import { csrfToken, checkCsrf } from "./middlewares/global"
+import { csrfToken, checkCsrf, globalMiddleware } from "./middlewares/global"
 
 dotenv.config()
 
@@ -33,6 +33,7 @@ class App{
         this.app.use(express.json())
         this.app.use(flash())
         this.app.use(sessionConfig)
+        this.app.use(globalMiddleware)
         this.app.use(csrf())
         this.app.use(csrfToken)
         this.app.use(checkCsrf)
