@@ -1,16 +1,20 @@
 import mongoose from "mongoose"
 import bcrypt from "bcryptjs"
+import unique from "mongoose-unique-validator"
 
 const UserSchema = new mongoose.Schema({
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,
         required: true
     }
 })
+
+UserSchema.plugin(unique)
 
 const UserModel = mongoose.model('User', UserSchema)
 
