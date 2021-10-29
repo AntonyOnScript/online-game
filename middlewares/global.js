@@ -1,5 +1,5 @@
 export function checkCsrf(err, request, response, next) {
-    const nonSecurePaths = ['/']
+    const nonSecurePaths = ['/', '/register'] // TO-DO: REMOVE /REGISTER AND /LOGIN WHEN PRODUCTION
     if(nonSecurePaths.includes(request.path)) return next()
 
     if(err) {
