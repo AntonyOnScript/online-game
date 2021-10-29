@@ -3,12 +3,12 @@ import dotenv from "dotenv"
 dotenv.config()
 
 export function index(request, response) {
-    response.json("index")
+    response.render("index")
 }
 
 export async function register(request, response) {
     const user = new User(request.body)
-    const newUser = await user.createUser()
+    const newUser = await user.createUser() // TO-DO: REMOVE IT
 
     if(user.errors.length > 0) {
         request.flash("errors", user.errors)

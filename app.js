@@ -23,6 +23,7 @@ class App{
     constructor() {
         this.app = express()
         this.middlewares()
+        this.viewsConfig()
         this.routes()
     }
 
