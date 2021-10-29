@@ -1,4 +1,6 @@
 import User from "../models/User"
+import dotenv from "dotenv"
+dotenv.config()
 
 export function index(request, response) {
     response.json("index")
@@ -7,6 +9,19 @@ export function index(request, response) {
 export async function register(request, response) {
     const user = new User(request.body)
     const newUser = await user.createUser()
+
+    if(user.errors.length > 0) {
+        request.flash("errors", user.errors)
+        request.session.save(() => {
+            return response.redirect(process.env.URL)
+        })
+        return
+    }
+
+    request.flash("success", "Registred successfully")
+    request.session.save(() => {
+        response.redirect(process.env.URL)
+    })
 
     response.json(newUser)
 }
