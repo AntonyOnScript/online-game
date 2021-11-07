@@ -1,7 +1,7 @@
 const { resolve } = require('path')
 
 module.exports = {
-    mode: "production",
+    mode: "development",
     entry: resolve(__dirname, 'src', 'js', 'index.js'),
     output: {
         path: resolve(__dirname, 'public'),

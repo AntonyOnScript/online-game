@@ -26,6 +26,8 @@
     "mongoose": "^6.0.12",
     "mongoose-unique-validator": "^3.0.0",
     "nodemon": "^2.0.14",
+    "socket.io": "^4.3.1",
+    "socket.io-client": "^4.3.2",
     "style-loader": "^3.3.1",
     "sucrase": "^3.20.3",
     "validator": "^13.6.0",

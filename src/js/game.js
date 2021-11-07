@@ -1,11 +1,21 @@
+import { io } from "socket.io-client"
+const socket = io()
+
 const CANVAS_ELEMENT = document.querySelector(".canvas")
 const CONTEXT = CANVAS_ELEMENT.getContext("2d")
 const WIDTH = CANVAS_ELEMENT.width = 300
 const HEIGHT = CANVAS_ELEMENT.height = 500
+var playerList = []
 
 CONTEXT.beginPath()
 CONTEXT.fillStyle = "black"
 CONTEXT.fillRect(0, 0, WIDTH, HEIGHT)
+
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
 
 function Player(posX, posY, width, height) {
     this.posX = posX
@@ -26,8 +36,6 @@ function Player(posX, posY, width, height) {
                 CONTEXT.beginPath()
                 CONTEXT.fillStyle = "black"
                 CONTEXT.fillRect(0, 0, WIDTH, HEIGHT)
-
-                this.render()
             }
 
             if(e.key === "s") {
@@ -35,8 +43,6 @@ function Player(posX, posY, width, height) {
                 CONTEXT.beginPath()
                 CONTEXT.fillStyle = "black"
                 CONTEXT.fillRect(0, 0, WIDTH, HEIGHT)
-
-                this.render()
             }
 
             if(e.key === "a") {
@@ -44,8 +50,6 @@ function Player(posX, posY, width, height) {
                 CONTEXT.beginPath()
                 CONTEXT.fillStyle = "black"
                 CONTEXT.fillRect(0, 0, WIDTH, HEIGHT)
-
-                this.render()
             }
 
             if(e.key === "d") {
@@ -53,13 +57,66 @@ function Player(posX, posY, width, height) {
                 CONTEXT.beginPath()
                 CONTEXT.fillStyle = "black"
                 CONTEXT.fillRect(0, 0, WIDTH, HEIGHT)
-
-                this.render()
             }
         })
     }
 }
 
+function TheBall(posX, posY, width, height) {
+    this.posX = posX
+    this.posY = posY
+    this.width = width
+    this.height = height
+
+    this.render = function() {
+        CONTEXT.beginPath()
+        CONTEXT.fillStyle = "green"
+        this.setPosition()
+    }
+
+    this.setPosition = function() {
+        CONTEXT.fillRect(this.posX, this.posY, this.width, this.height)
+    }
+
+    this.generateRandomPosition = function() {
+        this.posX = getRandomInt(0 + this.width, WIDTH - this.width)
+        this.posY = getRandomInt(0 + this.height, HEIGHT - this.height)
+    }
+}
+
 const CURRENT_PLAYER = new Player(12, 12, 15, 15)
-CURRENT_PLAYER.render()
+const THE_BALL = new TheBall(WIDTH/2, HEIGHT/2, 10, 10)
+
+socket.on("connected", givenId => CURRENT_PLAYER.id = givenId)
+socket.on("currentPlayersPosition", (data) => {
+    refreshPositions(data)
+})
+
+function refreshPositions(data) {
+    playerList = data
+    renderPositions()
+}
+
+function renderPositions() {
+    playerList.forEach(player => {
+        CONTEXT.beginPath()
+        CONTEXT.fillStyle = "purple"
+        CONTEXT.fillRect(player.posX, player.posY, player.width, player.height)
+    })
+}
+
 CURRENT_PLAYER.controls()
+
+loop()
+function loop() {
+    CONTEXT.beginPath()
+    CONTEXT.fillStyle = "black"
+    CONTEXT.fillRect(0, 0, WIDTH, HEIGHT)
+    socket.emit("movement", CURRENT_PLAYER)
+    renderPositions()
+
+    THE_BALL.render()
+    CURRENT_PLAYER.render()
+
+    requestAnimationFrame(loop)
+}
