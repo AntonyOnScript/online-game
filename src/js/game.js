@@ -58,6 +58,8 @@ function Player(posX, posY, width, height) {
                 CONTEXT.fillStyle = "black"
                 CONTEXT.fillRect(0, 0, WIDTH, HEIGHT)
             }
+
+            socket.emit("movement", this)
         })
     }
 }
@@ -87,7 +89,11 @@ function TheBall(posX, posY, width, height) {
 const CURRENT_PLAYER = new Player(12, 12, 15, 15)
 const THE_BALL = new TheBall(WIDTH/2, HEIGHT/2, 10, 10)
 
-socket.on("connected", givenId => CURRENT_PLAYER.id = givenId)
+socket.on("connected", givenId => {
+    CURRENT_PLAYER.id = givenId
+    socket.emit("movement", CURRENT_PLAYER)
+})
+
 socket.on("currentPlayersPosition", (data) => {
     refreshPositions(data)
 })
@@ -99,6 +105,7 @@ function refreshPositions(data) {
 
 function renderPositions() {
     playerList.forEach(player => {
+        if(player.id === CURRENT_PLAYER.id) return
         CONTEXT.beginPath()
         CONTEXT.fillStyle = "purple"
         CONTEXT.fillRect(player.posX, player.posY, player.width, player.height)
@@ -112,7 +119,6 @@ function loop() {
     CONTEXT.beginPath()
     CONTEXT.fillStyle = "black"
     CONTEXT.fillRect(0, 0, WIDTH, HEIGHT)
-    socket.emit("movement", CURRENT_PLAYER)
     renderPositions()
 
     THE_BALL.render()
