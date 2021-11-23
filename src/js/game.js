@@ -94,8 +94,9 @@ socket.on("connected", givenId => {
     socket.emit("movement", CURRENT_PLAYER)
 })
 
-socket.on("currentPlayersPosition", (data) => {
-    refreshPositions(data)
+socket.on("currentPlayersPosition", (playerList) => {
+    console.log(playerList)
+    refreshPositions(playerList)
 })
 
 function refreshPositions(data) {
@@ -116,6 +117,7 @@ CURRENT_PLAYER.controls()
 
 loop()
 function loop() {
+    socket.emit("getPlayersPosition")
     CONTEXT.beginPath()
     CONTEXT.fillStyle = "black"
     CONTEXT.fillRect(0, 0, WIDTH, HEIGHT)

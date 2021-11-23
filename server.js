@@ -44,7 +44,10 @@ io.on("connect", (socket) => {
         console.log("==== player list ====")
         console.log(playerList)
         console.log("==== player list ====")
-        socket.broadcast.emit("currentPlayersPosition", playerList)
+    })
+
+    socket.on("getPlayersPosition", ()=> {
+        socket.emit("currentPlayersPosition", playerList)
     })
     
     socket.on("disconnecting", (reason) => {
