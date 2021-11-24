@@ -79,15 +79,11 @@ function TheBall(posX, posY, width, height) {
     this.setPosition = function() {
         CONTEXT.fillRect(this.posX, this.posY, this.width, this.height)
     }
-
-    this.generateRandomPosition = function() {
-        this.posX = getRandomInt(0 + this.width, WIDTH - this.width)
-        this.posY = getRandomInt(0 + this.height, HEIGHT - this.height)
-    }
+    
 }
 
 const CURRENT_PLAYER = new Player(12, 12, 15, 15)
-const THE_BALL = new TheBall(WIDTH/2, HEIGHT/2, 10, 10)
+const THE_BALL = new TheBall(WIDTH/2, HEIGHT/2, 15, 15)
 
 socket.on("connected", givenId => {
     CURRENT_PLAYER.id = givenId
@@ -95,8 +91,12 @@ socket.on("connected", givenId => {
 })
 
 socket.on("currentPlayersPosition", (playerList) => {
-    console.log(playerList)
     refreshPositions(playerList)
+})
+
+socket.on("currentBallPosition", (ballData) => {
+    THE_BALL.posX = ballData.posX
+    THE_BALL.posY = ballData.posY
 })
 
 function refreshPositions(data) {
@@ -118,6 +118,7 @@ CURRENT_PLAYER.controls()
 loop()
 function loop() {
     socket.emit("getPlayersPosition")
+    THE_BALL.render()
     CONTEXT.beginPath()
     CONTEXT.fillStyle = "black"
     CONTEXT.fillRect(0, 0, WIDTH, HEIGHT)

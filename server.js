@@ -24,6 +24,35 @@ server.listen(process.env.PORT || 8081, () => console.log("Running!!!"))
 
 let playerList = []
 
+function getRandomInt(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function Ball() {
+    this.posX = 150
+    this.posY = 250
+    this.width = 15
+    this.height = 15
+
+    this.generateRandomPosition = function() {
+        this.posX = getRandomInt(0 + this.width, 300 - this.width)
+        this.posY = getRandomInt(0 + this.height, 500 - this.height)
+    }
+
+    this.checkColision = function() {
+        playerList.forEach(player => {
+            if((Number(player.posX.toFixed(0)) + Number(player.width/2) >= this.posX - this.width/2 && Number(player.posX.toFixed(0)) - Number(player.width/2) <= this.posX + this.width/2) && (Number(player.posY.toFixed(0)) + Number(player.height/2) >= this.posY - this.height/2 && Number(player.posY.toFixed(0)) - Number(player.height/2) <= this.posY + this.height/2)) {
+                this.generateRandomPosition()
+            }
+        })
+    }
+
+}
+
+let theBall = new Ball
+
 io.on("connect", (socket) => {
     socket.emit("connected", socket.id)
     socket.on("movement", (player) => {
@@ -48,6 +77,8 @@ io.on("connect", (socket) => {
 
     socket.on("getPlayersPosition", ()=> {
         socket.emit("currentPlayersPosition", playerList)
+        theBall.checkColision()
+        socket.emit("currentBallPosition", theBall)
     })
     
     socket.on("disconnecting", (reason) => {
