@@ -1,3 +1,4 @@
-.form-login-field {
-    height: 100vh;
+body {
+    min-height: 100vh;
+    background-color: rgb(53, 53, 53);
 }

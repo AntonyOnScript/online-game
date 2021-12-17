@@ -1,26 +1,12 @@
 import app from "./app"
-import mongoose from "mongoose"
-import dotenv from "dotenv"
 import http from "http"
 import { Server } from "socket.io"
 
 const server = http.createServer(app)
 const io = new Server(server)
 
-dotenv.config()
-/*
-mongoose.connect(process.env.MONGO_URL)
-.then(() => {
-    app.emit("ok")
-}).catch(e => {
-    console.log(e)
-})
-*/
 
-
-//app.on('ok', () => {
 server.listen(process.env.PORT || 8081, () => console.log("Running!!!"))
-//})
 
 let playerList = []
 
