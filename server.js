@@ -30,6 +30,8 @@ function Ball() {
         playerList.forEach(player => {
             if((Number(player.posX.toFixed(0)) + Number(player.width/2) >= this.posX - this.width/2 && Number(player.posX.toFixed(0)) - Number(player.width/2) <= this.posX + this.width/2) && (Number(player.posY.toFixed(0)) + Number(player.height/2) >= this.posY - this.height/2 && Number(player.posY.toFixed(0)) - Number(player.height/2) <= this.posY + this.height/2)) {
                 player.points++
+                player.width *= 1.1
+                player.height *= 1.1
                 this.generateRandomPosition()
             }
         })

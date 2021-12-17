@@ -4,7 +4,7 @@ const socket = io()
 const POINTS_ELEMENT = document.querySelector(".points")
 const CANVAS_ELEMENT = document.querySelector(".canvas")
 const CONTEXT = CANVAS_ELEMENT.getContext("2d")
-const WIDTH = CANVAS_ELEMENT.width = 300
+const WIDTH = CANVAS_ELEMENT.width = 600
 const HEIGHT = CANVAS_ELEMENT.height = 500
 var playerList = []
 var points = []
@@ -39,28 +39,28 @@ function Player(posX, posY, width, height, user) {
     this.controls = function() {
         window.addEventListener("keydown", (e) => {
             if(e.key === "w") {
-                this.posY -= 10.98
+                this.posY -= 20
                 CONTEXT.beginPath()
                 CONTEXT.fillStyle = "black"
                 CONTEXT.fillRect(0, 0, WIDTH, HEIGHT)
             }
 
             if(e.key === "s") {
-                this.posY += 10.98
+                this.posY += 20
                 CONTEXT.beginPath()
                 CONTEXT.fillStyle = "black"
                 CONTEXT.fillRect(0, 0, WIDTH, HEIGHT)
             }
 
             if(e.key === "a") {
-                this.posX -= 10.98
+                this.posX -= 20
                 CONTEXT.beginPath()
                 CONTEXT.fillStyle = "black"
                 CONTEXT.fillRect(0, 0, WIDTH, HEIGHT)
             }
 
             if(e.key === "d") {
-                this.posX += 10.98
+                this.posX += 20
                 CONTEXT.beginPath()
                 CONTEXT.fillStyle = "black"
                 CONTEXT.fillRect(0, 0, WIDTH, HEIGHT)
@@ -134,6 +134,8 @@ function renderPositions() {
     playerList.forEach(player => {
         if(player.id === CURRENT_PLAYER.id) {
             CURRENT_PLAYER.points = player.points
+            CURRENT_PLAYER.width = player.width 
+            CURRENT_PLAYER.height = player.height
             return
         }
         CONTEXT.beginPath()
