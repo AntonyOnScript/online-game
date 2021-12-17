@@ -1,12 +1,15 @@
+import dotenv from "dotenv"
+
+dotenv.config()
+
 export function gamePage(request, response) {
-    console.log(request.query)
     if(!request.query.user) {
-        return response.redirect("http://localhost:8081/")
+        return response.redirect(process.env.url)
     }
 
     response.render("gamepage", { user: request.query.user })
 }
 
 export function home(request, response) {
-    response.render("home")
+    response.render("home", { url: process.env.url })
 }
