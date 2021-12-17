@@ -1,0 +1,25 @@
+<%- include('./includes/head.ejs') %>
+<body>
+    <%- include('./includes/nav.ejs') %>
+    <div class="w-100 login">
+        <form method="get" action="https://gamedotant.herokuapp.com/game" class="input-group mb-3 w-75">
+            <input type="text" class="form-control nickname" name="user" placeholder="Your Nickname here" aria-label="Example text with button addon" aria-describedby="button-addon1">
+            <button class="btn btn-success log-in" type="submit" id="button-addon1">Start</button>
+        </form>
+    </div>
+    
+    <style>
+        .login {
+            height: 100%;
+            width: 100%;
+            position: fixed;
+            top: 0px;
+            left: 0px;
+            background-color: rgba(0, 0, 0, 0.534);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</body>
+<%- include('./includes/footer.ejs') %>

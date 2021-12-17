@@ -11,5 +11,5 @@ export function gamePage(request, response) {
 }
 
 export function home(request, response) {
-    response.render("home", { url: process.env.url })
+    response.render("home")
 }
