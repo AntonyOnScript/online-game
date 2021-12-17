@@ -17,16 +17,20 @@ function getRandomInt(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function Player(posX, posY, width, height) {
+function Player(posX, posY, width, height, user) {
     this.posX = posX
     this.posY = posY
     this.width = width
     this.height = height
+    this.user = user
     
     this.render = function() {
         CONTEXT.beginPath()
         CONTEXT.fillStyle = "white"
         CONTEXT.fillRect(this.posX, this.posY, this.width, this.height)
+        CONTEXT.font = "12px serif"
+        CONTEXT.fillStyle = "white"
+        CONTEXT.fillText(this.user, this.posX - 10, this.posY - 10)
     }
 
     this.controls = function() {
@@ -79,10 +83,9 @@ function TheBall(posX, posY, width, height) {
     this.setPosition = function() {
         CONTEXT.fillRect(this.posX, this.posY, this.width, this.height)
     }
-    
 }
 
-const CURRENT_PLAYER = new Player(12, 12, 15, 15)
+const CURRENT_PLAYER = new Player(12, 12, 15, 15, user)
 const THE_BALL = new TheBall(WIDTH/2, HEIGHT/2, 15, 15)
 
 socket.on("connected", givenId => {
@@ -110,6 +113,9 @@ function renderPositions() {
         CONTEXT.beginPath()
         CONTEXT.fillStyle = "purple"
         CONTEXT.fillRect(player.posX, player.posY, player.width, player.height)
+        CONTEXT.font = "12px serif"
+        CONTEXT.fillStyle = "white"
+        CONTEXT.fillText(player.user, player.posX - 10, player.posY - 10)
     })
 }
 
