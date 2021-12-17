@@ -1,11 +1,13 @@
 import { io } from "socket.io-client"
 const socket = io()
 
+const POINTS_ELEMENT = document.querySelector(".points")
 const CANVAS_ELEMENT = document.querySelector(".canvas")
 const CONTEXT = CANVAS_ELEMENT.getContext("2d")
 const WIDTH = CANVAS_ELEMENT.width = 300
 const HEIGHT = CANVAS_ELEMENT.height = 500
 var playerList = []
+var points = []
 
 CONTEXT.beginPath()
 CONTEXT.fillStyle = "black"
@@ -23,6 +25,7 @@ function Player(posX, posY, width, height, user) {
     this.width = width
     this.height = height
     this.user = user
+    this.points = 0
     
     this.render = function() {
         CONTEXT.beginPath()
@@ -97,6 +100,10 @@ socket.on("currentPlayersPosition", (playerList) => {
     refreshPositions(playerList)
 })
 
+socket.on("points", points => {
+    CURRENT_PLAYER.points = points
+})
+
 socket.on("currentBallPosition", (ballData) => {
     THE_BALL.posX = ballData.posX
     THE_BALL.posY = ballData.posY
@@ -105,11 +112,30 @@ socket.on("currentBallPosition", (ballData) => {
 function refreshPositions(data) {
     playerList = data
     renderPositions()
+    listPointers()
+}
+
+function listPointers() {
+    points = playerList.map((value, index) => {
+        let user = value.user
+        let points = value.points
+        let pointString = `${user}: ${points}`
+        return pointString
+    })
+    POINTS_ELEMENT.innerHTML = ''
+    points.forEach(point => {
+        let li = document.createElement("li")
+        li.innerText = point
+        POINTS_ELEMENT.appendChild(li)
+    })
 }
 
 function renderPositions() {
     playerList.forEach(player => {
-        if(player.id === CURRENT_PLAYER.id) return
+        if(player.id === CURRENT_PLAYER.id) {
+            CURRENT_PLAYER.points = player.points
+            return
+        }
         CONTEXT.beginPath()
         CONTEXT.fillStyle = "purple"
         CONTEXT.fillRect(player.posX, player.posY, player.width, player.height)

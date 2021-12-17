@@ -1,9 +1,27 @@
 <%- include('./includes/head.ejs') %>
 <body>
     <%- include('./includes/nav.ejs') %>
-    <canvas class="canvas"></canvas>
+    <div class="container">
+        <div class="game-container">
+            <canvas class="canvas"></canvas>
+            <ul class="points"></ul>
+        </div>
+    </div>
     <script>
         var user = "<%= user %>"
     </script>
+    <style>
+        .points {
+            color: white;
+            position: absolute;
+            top: 10px;
+            right: 2px;
+        }
+
+        .game-container {
+            position: relative;
+            width: fit-content;
+        }
+    </style>
 </body>
 <%- include('./includes/footer.ejs') %>
